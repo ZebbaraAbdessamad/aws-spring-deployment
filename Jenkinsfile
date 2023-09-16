@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     // Use the 'withCredentials' step to securely access the SSH private key
-                    withCredentials([sshUserPrivateKey(credentialsId: '3.81.236.160', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'AWS_CREDENTIAL', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Copy the JAR file to the EC2 instance
                         sh "scp -i \$SSH_PRIVATE_KEY target/\$JAR_FILE_NAME \$EC2_USER@\$EC2_HOST:~/"
                         
