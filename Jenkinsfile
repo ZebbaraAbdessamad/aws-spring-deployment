@@ -21,20 +21,21 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+            stage('Deploy') {
             steps {
-                   script {
-                        def remoteHost = '3.81.236.160'  // Update with your EC2 instance's IP address
-                        def remoteUser = 'ec2-user'      // Update with your EC2 instance's SSH username
-                        def privateKey = credentials('3.81.236.160')  // Use the ID of your SSH private key credential
-            
-                        sh "scp -i ${privateKey} target/${JAR_FILE_NAME} ${remoteUser}@${remoteHost}:~/"
-            
-                        // SSH into the remote server and start the application
-                        sh "ssh -i ${privateKey} ${remoteUser}@${remoteHost} 'nohup java -jar ~/${JAR_FILE_NAME} > app.log 2>&1 &'"
-                   } 
+                script {
+                    def remoteHost = '3.81.236.160'  // Update with your EC2 instance's IP address
+                    def remoteUser = 'ec2-user'      // Update with your EC2 instance's SSH username
+                    def privateKey = credentials('3.81.236.160')  // Use the ID of your SSH private key credential
+        
+                    sh "scp -i ${privateKey} target/$${JAR_FILE_NAME} ${remoteUser}@${remoteHost}:~/"
+        
+                    // SSH into the remote server and start the application
+                    sh "ssh -i ${privateKey} ${remoteUser}@${remoteHost} 'nohup java -jar ~/$${JAR_FILE_NAME} > app.log 2>&1 &'"
+                } 
             }
         }
+
     }
 
     post {
