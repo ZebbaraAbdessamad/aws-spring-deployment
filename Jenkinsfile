@@ -8,7 +8,6 @@ pipeline {
     environment {
         EC2_HOST = '3.81.236.160' // Update with your EC2 instance's IP address
         EC2_USER = 'ec2-user'     // Update with your EC2 instance's SSH username
-        SSH_CREDENTIALS_ID = credentials('3.81.236.160') // Update with your SSH key credential ID
         JAR_FILE_NAME = 'myapp-0.0.1-SNAPSHOT.jar' 
     }
 
@@ -22,17 +21,19 @@ pipeline {
 
         stage('Deploy') {
             steps {
-
-                // Copy the JAR file to the EC2 instance
-                sh "scp -i ${SSH_CREDENTIALS_ID} target/*.jar ${EC2_USER}@${EC2_HOST}:~/"
-        
-                // SSH into the EC2 instance and deploy the application
-                sh "ssh -i ${SSH_CREDENTIALS_ID} ${EC2_USER}@${EC2_HOST} 'nohup java -jar ~/*.jar > app.log 2>&1 &'"
+                script {
+                    // Use the 'withCredentials' step to securely access the SSH private key
+                    withCredentials([sshUserPrivateKey(credentialsId: '3.81.236.160', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Copy the JAR file to the EC2 instance
+                        sh "scp -i \$SSH_PRIVATE_KEY target/\$JAR_FILE_NAME \$EC2_USER@\$EC2_HOST:~/"
+                        
+                        // SSH into the EC2 instance and deploy the application
+                        sh "ssh -i \$SSH_PRIVATE_KEY \$EC2_USER@\$EC2_HOST 'nohup java -jar ~/\$JAR_FILE_NAME > app.log 2>&1 &'"
+                    }
+                } 
             }
         }
-
-        }
-    
+    }
 
     post {
         success {
