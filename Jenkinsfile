@@ -22,24 +22,11 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Deploy your Spring Boot application to the EC2 instance
-                script {
-                    def remote = [:]
-                    remote.name = 'ec2-instance'
-                    remote.host = EC2_HOST
-                    remote.user = EC2_USER
-                    remote.identityFile = credentials(SSH_CREDENTIALS_ID)
+                // Copy the JAR file to the EC2 instance
+                sh "scp -i ${SSH_CREDENTIALS_ID} target/*.jar ${EC2_USER}@${EC2_HOST}:~/"
 
-                    remote.allowAnyHosts = true
-
-                    // Copy the JAR/WAR file to the EC2 instance
-                    remote.command = "scp -i ${remote.identityFile} target/*.jar ${remote.user}@${remote.host}:~/"
-                    sshPut remote: remote
-
-                    // SSH into the EC2 instance and deploy the application
-                    remote.command = "ssh -i ${remote.identityFile} ${remote.user}@${remote.host} 'nohup java -jar ~/*.jar > app.log 2>&1 &'"
-                    sshCommand remote: remote
-                }
+                // SSH into the EC2 instance and deploy the application
+                sh "ssh -i ${SSH_CREDENTIALS_ID} ${EC2_USER}@${EC2_HOST} 'nohup java -jar ~/*.jar > app.log 2>&1 &'"
             }
         }
     }
