@@ -8,12 +8,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your code from Git repository
-                git 'https://github.com/your/repo.git' // Replace with your GitHub repository URL
-            }
-        }
 
         stage('Build') {
             steps {
