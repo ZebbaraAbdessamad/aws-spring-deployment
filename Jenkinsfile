@@ -27,10 +27,10 @@ pipeline {
                     def remoteUser = 'ec2-user'      // Update with your EC2 instance's SSH username
                     def privateKey = credentials("${SSH_CREDENTIALS_ID}")  // Use the ID of your SSH private key credential
         
-                    sh "scp -i ${privateKey} target/${JAR_FILE_NAME} ${remoteUser}@${remoteHost}:~/"
+                    sh "scp -i \${privateKey} target/\${JAR_FILE_NAME} \${remoteUser}@\${remoteHost}:~/"
         
                     // SSH into the remote server and start the application
-                    sh "ssh -i ${privateKey} ${remoteUser}@${remoteHost} 'nohup java -jar ~/${JAR_FILE_NAME} > app.log 2>&1 &'"
+                    sh "ssh -i \${privateKey} \${remoteUser}@\${remoteHost} 'nohup java -jar ~/\${JAR_FILE_NAME} > app.log 2>&1 &'"
                 } 
             }
         }
