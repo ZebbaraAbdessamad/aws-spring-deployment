@@ -27,6 +27,7 @@ pipeline {
                     def remoteUser = 'ec2-user'      // Update with your EC2 instance's SSH username
                     def privateKey = credentials("${SSH_CREDENTIALS_ID}")  // Use the ID of your SSH private key credential
         
+                    // Copy the JAR file to the remote server
                     sh "scp -i \${privateKey} target/\${JAR_FILE_NAME} \${remoteUser}@\${remoteHost}:~/"
         
                     // SSH into the remote server and start the application
