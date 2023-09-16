@@ -8,7 +8,7 @@ pipeline {
     environment {
         EC2_HOST = '3.81.236.160' // Update with your EC2 instance's IP address
         EC2_USER = 'ec2-user'     // Update with your EC2 instance's SSH username
-        SSH_CREDENTIALS_ID = '3.81.236.160' // Update with your SSH key credential ID
+        SSH_CREDENTIALS_ID = credentials('3.81.236.160') // Update with your SSH key credential ID
         JAR_FILE_NAME = 'myapp-0.0.1-SNAPSHOT.jar' 
     }
 
@@ -22,9 +22,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Add EC2 instance's host key to known_hosts
-                sh "ssh-keyscan -H ${EC2_HOST} >> ~/.ssh/known_hosts"
-                
+
                 // Copy the JAR file to the EC2 instance
                 sh "scp -i ${SSH_CREDENTIALS_ID} target/*.jar ${EC2_USER}@${EC2_HOST}:~/"
         
