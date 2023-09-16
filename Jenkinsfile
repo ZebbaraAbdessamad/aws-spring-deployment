@@ -8,7 +8,7 @@ pipeline {
     environment {
         EC2_HOST = '3.81.236.160' // Update with your EC2 instance's IP address
         EC2_USER = 'ec2-user'     // Update with your EC2 instance's SSH username
-        SSH_CREDENTIALS_ID = '3.81.236.160' // Update with your SSH key credential ID
+        SSH_CREDENTIALS_ID = credentials('3.81.236.160') // Update with your SSH key credential ID
     }
 
     stages {
