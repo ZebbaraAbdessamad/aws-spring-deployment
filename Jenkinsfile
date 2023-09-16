@@ -1,5 +1,9 @@
 pipeline {
     agent any
+      tools {
+        // Specify the name of the Maven installation defined in Jenkins
+        maven 'Maven 3.9.4'
+    }
 
     environment {
         EC2_HOST = '54.88.11.100' // Update with your EC2 instance's IP address
