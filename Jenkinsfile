@@ -22,11 +22,15 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Copy the JAR file to the EC2 instance
-                sh "scp -i ${SSH_CREDENTIALS_ID} target/*.jar ${EC2_USER}@${EC2_HOST}:~/"
+            def remoteHost = '3.81.236.160'  // Update with your EC2 instance's IP address
+            def remoteUser = 'ec2-user'      // Update with your EC2 instance's SSH username
+            def privateKey = credentials('3.81.236.160')  // Use the ID of your SSH private key credential
 
-                // SSH into the EC2 instance and deploy the application
-                sh "ssh -i ${SSH_CREDENTIALS_ID} ${EC2_USER}@${EC2_HOST} 'nohup java -jar ~/*.jar > app.log 2>&1 &'"
+            sh "scp -i ${privateKey} target/${jarFileName} ${remoteUser}@${remoteHost}:~/"
+
+            // SSH into the remote server and start the application
+            sh "ssh -i ${privateKey} ${remoteUser}@${remoteHost} 'nohup java -jar ~/${jarFileName} > app.log 2>&1 &'"
+                
             }
         }
     }
