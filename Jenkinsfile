@@ -22,22 +22,19 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {
-                    def remoteHost = '3.81.236.160'  // Update with your EC2 instance's IP address
-                    def remoteUser = 'ec2-user'      // Update with your EC2 instance's SSH username
-                    def privateKey = credentials("${SSH_CREDENTIALS_ID}")  // Use the ID of your SSH private key credential
+                // Add EC2 instance's host key to known_hosts
+                sh "ssh-keyscan -H ${EC2_HOST} >> ~/.ssh/known_hosts"
+                
+                // Copy the JAR file to the EC2 instance
+                sh "scp -i ${SSH_CREDENTIALS_ID} target/*.jar ${EC2_USER}@${EC2_HOST}:~/"
         
-                   
-                    
-                    // Copy the JAR file to the EC2 instance
-                    sh "scp -i ${privateKey} target/*.jar ${EC2_USER}@${EC2_HOST}:~/"
-            
-                    // SSH into the EC2 instance and deploy the application
-                    sh "ssh -i ${SSH_CREDENTIALS_ID} ${EC2_USER}@${EC2_HOST} 'nohup java -jar ~/*.jar > app.log 2>&1 &'"
-                }
+                // SSH into the EC2 instance and deploy the application
+                sh "ssh -i ${SSH_CREDENTIALS_ID} ${EC2_USER}@${EC2_HOST} 'nohup java -jar ~/*.jar > app.log 2>&1 &'"
             }
         }
-    }
+
+        }
+    
 
     post {
         success {
