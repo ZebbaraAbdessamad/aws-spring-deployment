@@ -25,10 +25,10 @@ pipeline {
                     // Use the 'withCredentials' step to securely access the SSH private key
                     withCredentials([sshUserPrivateKey(credentialsId: 'AWS_CREDENTIAL', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Copy the JAR file to the EC2 instance
-                        sh "scp  \$SSH_PRIVATE_KEY target/\$JAR_FILE_NAME \$EC2_USER@\$EC2_HOST:~/"
+                        sh "scp   target/\$JAR_FILE_NAME \$EC2_USER@\$EC2_HOST:~/"
                         
                         // SSH into the EC2 instance and deploy the application
-                        sh "ssh  \$SSH_PRIVATE_KEY \$EC2_USER@\$EC2_HOST 'nohup java -jar ~/\$JAR_FILE_NAME > app.log 2>&1 &'"
+                        sh "ssh   \$EC2_USER@\$EC2_HOST 'nohup java -jar ~/\$JAR_FILE_NAME > app.log 2>&1 &'"
                     }
                 } 
             }
