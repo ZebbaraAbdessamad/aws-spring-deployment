@@ -29,7 +29,7 @@ pipeline {
                     sh "scp -i \$WORKSPACE/zebbara-abdessamad-ssh.pem -v target/\$JAR_FILE_NAME \$EC2_USER@\$EC2_HOST:~/"
 
                      // SSH into the EC2 instance and install Java 11 from Amazon Linux 2 repositories
-                    sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem \$EC2_USER@\$EC2_HOST 'sudo amazon-linux-extras install -y java-openjdk11'"
+                    sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem \$EC2_USER@\$EC2_HOST 'sudo  yum install -y java-openjdk11'"
 
                     // SSH into the EC2 instance and deploy the application
                     sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem  \$EC2_USER@\$EC2_HOST 'nohup java -jar ~/\$JAR_FILE_NAME > app.log 2>&1 &'"
