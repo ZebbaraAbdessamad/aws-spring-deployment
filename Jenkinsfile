@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        EC2_HOST = '3.87.33.185' // Update with your EC2 instance's IP address
+        EC2_HOST = '3.80.240.133' // Update with your EC2 instance's IP address
         EC2_USER = 'ec2-user'     // Update with your EC2 instance's SSH username
         JAR_FILE_NAME = 'myapp-0.0.1-SNAPSHOT.jar' 
     }
@@ -32,7 +32,8 @@ pipeline {
                     sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem \$EC2_USER@\$EC2_HOST 'sudo  yum install -y maven'"
 
                     // SSH into the EC2 instance and deploy the application
-                    sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem  \$EC2_USER@\$EC2_HOST 'java -jar \$JAR_FILE_NAME > app.log 2>&1 &'"
+                   sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem \$EC2_USER@\$EC2_HOST 'nohup java -jar \$JAR_FILE_NAME > app.log 2>&1'"
+
                 } 
             }
         }
