@@ -32,7 +32,7 @@ pipeline {
                     sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem \$EC2_USER@\$EC2_HOST 'sudo  yum install -y maven'"
 
                     // SSH into the EC2 instance and deploy the application
-                   sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem \$EC2_USER@\$EC2_HOST -v 'cd ~/ && mvn spring-boot:run > app.log 2>&1'"
+                   sh "ssh -i \$WORKSPACE/zebbara-abdessamad-ssh.pem \$EC2_USER@\$EC2_HOST -v 'java -jar ~/myapp-0.0.1-SNAPSHOT.jar'"
 
                 } 
             }
