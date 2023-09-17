@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        EC2_HOST = '3.80.240.133' // Update with your EC2 instance's IP address
+        EC2_HOST = '54.89.35.174' // Update with your EC2 instance's IP address
         EC2_USER = 'ec2-user'     // Update with your EC2 instance's SSH username
         JAR_FILE_NAME = 'myapp-0.0.1-SNAPSHOT.jar' 
     }
@@ -22,8 +22,6 @@ pipeline {
      stage('Deploy') {
             steps {
                 script {
-                    // Add the host key to known_hosts file in Jenkins
-                    sh "ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts"
 
                     // Copy the JAR file to the EC2 instance using scp with -i
                     sh "scp -i \$WORKSPACE/zebbara-abdessamad-ssh.pem -v target/\$JAR_FILE_NAME \$EC2_USER@\$EC2_HOST:~/"
