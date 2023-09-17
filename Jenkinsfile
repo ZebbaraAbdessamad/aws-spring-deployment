@@ -22,6 +22,8 @@ pipeline {
      stage('Deploy') {
             steps {
                 script {
+                    // Add the host key to known_hosts file in Jenkins
+                    sh "ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts"
 
                     // Copy the JAR file to the EC2 instance using scp with -i
                     sh "scp -i \$WORKSPACE/zebbara-abdessamad-ssh.pem -v target/\$JAR_FILE_NAME \$EC2_USER@\$EC2_HOST:~/"
